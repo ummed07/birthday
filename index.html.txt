@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday 💖</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Comic Sans MS', cursive;
+    background: linear-gradient(#ffe6f0, #fff);
+    text-align: center;
+    overflow-x: hidden;
+}
+
+/* Countdown */
+#countdownPage {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#countdown {
+    font-size: 2.5rem;
+    color: #ff4d88;
+}
+
+/* Birthday Page */
+#birthdayPage {
+    display: none;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 3rem;
+    color: #ff3385;
+}
+
+.message {
+    font-size: 1.2rem;
+    color: #ff6699;
+    margin-bottom: 20px;
+}
+
+/* Photos */
+.photos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.photo-box {
+    width: 180px;
+    height: 180px;
+    border: 3px dashed #ff99cc;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff0f5;
+    color: #ff66a3;
+}
+
+/* Floating flowers */
+.flower, .balloon, .confetti {
+    position: absolute;
+    animation: float linear infinite;
+}
+
+@keyframes float {
+    from { transform: translateY(100vh); opacity: 1; }
+    to { transform: translateY(-10vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Countdown -->
+<div id="countdownPage">
+    <h1>🎂 Birthday Countdown 🎂</h1>
+    <div id="countdown">Loading...</div>
+</div>
+
+<!-- Birthday Page -->
+<div id="birthdayPage">
+    <h1>🎉 Happy Birthday <span id="name">Your Name</span> 🎉</h1>
+    <div class="message">
+        May your day be filled with love, laughter and beautiful memories 💖🌸
+    </div>
+
+    <div class="photos">
+        <div class="photo-box">Photo 1</div>
+        <div class="photo-box">Photo 2</div>
+        <div class="photo-box">Photo 3</div>
+    </div>
+</div>
+
+<!-- Background Music -->
+<audio id="music" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* 🎯 SET DETAILS HERE */
+const birthdayDate = new Date("2026-01-10 00:00:00").getTime();
+document.getElementById("name").innerText = "Bestie 💕";
+
+/* Countdown Logic */
+const countdownEl = document.getElementById("countdown");
+const countdownPage = document.getElementById("countdownPage");
+const birthdayPage = document.getElementById("birthdayPage");
+const music = document.getElementById("music");
+
+const timer = setInterval(() => {
+    const now = new Date().getTime();
+    const diff = birthdayDate - now;
+
+    if (diff <= 0) {
+        clearInterval(timer);
+        countdownPage.style.display = "none";
+        birthdayPage.style.display = "block";
+        music.play();
+        startDecorations();
+        return;
+    }
+
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const m = Math.floor((diff / (1000 * 60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+
+    countdownEl.innerHTML = `${d}d ${h}h ${m}m ${s}s`;
+}, 1000);
+
+/* Decorations */
+function startDecorations() {
+    const flowers = ["🌸","🌼","🌺","🌷","💐"];
+    const balloons = ["🎈","🎈","🎈"];
+    const confetti = ["🎊","✨","💖"];
+
+    setInterval(() => spawn(flowers, "flower", 24, 6), 400);
+    setInterval(() => spawn(balloons, "balloon", 32, 8), 700);
+    setInterval(() => spawn(confetti, "confetti", 20, 5), 300);
+}
+
+function spawn(arr, cls, size, duration) {
+    const el = document.createElement("div");
+    el.className = cls;
+    el.innerText = arr[Math.floor(Math.random() * arr.length)];
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.fontSize = size + "px";
+    el.style.animationDuration = duration + "s";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), duration * 1000);
+}
+</script>
+
+</body>
+</html>
